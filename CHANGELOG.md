@@ -17,3 +17,8 @@ All notable changes to `kempo-shipping-easypost` are documented in this file.
 - **Carrier rates for kempo-shipping through EasyPost.** A `kempo-shipping:rates` handler that prices each packed parcel with one EasyPost shipment (rates only, nothing is bought), giving the customer a choice between the USPS, UPS, FedEx and other services you turn on at checkout.
 - **An EasyPost tab on the Shipping page:** the API key (replace-only, stored encrypted, never sent back), the services by carrier, other services, residential pricing, how long prices are kept, and **Test EasyPost**, which lists every rate EasyPost returned with its exact service name.
 - **A price cache and a 429 backoff** so checkout stays fast and rate requests stay few, and a handler that never throws, so an EasyPost problem leaves the order priced by the store's own rates.
+
+## [0.1.3] - 2026-10-26
+### Changed
+- The labels and the rates for an order are kempo-ui tables. Print label opens the label, and Track, Ask for refund and Buy label are row controls.
+- Requires kempo 4.9.7 (the admin lists use kempo-ui tables).
