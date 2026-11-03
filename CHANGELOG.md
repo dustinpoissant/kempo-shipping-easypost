@@ -6,6 +6,9 @@ All notable changes to `kempo-shipping-easypost` are documented in this file.
 
 ### Changed
 
+- The `kempo-ui` peer dependency is now `>=1.0.0`.
+- The `kempo` peer dependency is now `>=4.10.2`.
+
 - The EasyPost order tab is a plain `k-tab` and `k-tab-content` on the order page, and reloads when the order changes.
 
 - The EasyPost tab is a plain `k-tab` and `k-tab-content` on the shipping page (`#easypost`). The component reads the Ship From address from the shipping settings when its tab is first shown, and listens on `#shipping` for changes.
