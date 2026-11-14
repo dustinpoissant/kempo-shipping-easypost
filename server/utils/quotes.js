@@ -1,6 +1,7 @@
 import { buildShipment } from './easypost.js';
 import { KNOWN, labelFor, tokenOf } from './services.js';
 import { toInches, toOunces } from './units.js';
+import { isAccountProblem } from './notifications/failures.js';
 
 /*
   Turning the parcels kempo-shipping packed into carrier quotes. Pure apart from the client and cache it is given, so it is
@@ -64,7 +65,7 @@ export const isOffered = (rate, settings) => {
 };
 
 export const quoteParcels = async ({ parcels, address, origin, units, currency, settings, client, cache, ready = true, now = Date.now }) => {
-  const result = { quoted: 0, skipped: 0, pending: false };
+  const result = { quoted: 0, skipped: 0, pending: false, broken: null, answered: false };
   const destinationZip = DOMESTIC.has(address?.country) ? zipOf(address?.postalCode) : null;
   const originZip = !origin?.country || DOMESTIC.has(origin.country) ? zipOf(origin?.postalCode) : null;
   if(String(currency).toLowerCase() !== 'usd' || !destinationZip || !originZip || (!settings.services.length && !settings.otherServices)){
@@ -92,9 +93,12 @@ export const quoteParcels = async ({ parcels, address, origin, units, currency, 
       const [error, found] = await client.rates(buildShipment({ origin: from, destination: to, ...measures, residential: settings.residential }));
       if(error){
         console.warn(`[kempo-shipping-easypost] No EasyPost prices: ${error.msg}`);
+        if(isAccountProblem(error)) result.broken ??= error;
+        else if(error.code === 422) result.answered = true;
         result.skipped++;
         continue;
       }
+      result.answered = true;
       rates = found.rates;
       if(ttl) cache.set(key, rates, ttl);
     }

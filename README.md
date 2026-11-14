@@ -49,6 +49,10 @@ Getting prices creates a shipment on EasyPost (nothing is bought); the shipment 
 
 Permissions are kempo-shipping's: `shipping:view` sees the tab, `shipping:manage` changes it and runs the test.
 
+## When EasyPost stops giving prices
+
+If EasyPost refuses the key, the account has no credit or the service is down, checkout carries on with the store's own table or flat rate, so nobody would notice the shipping was wrong. The people who hold `shipping:manage` get a **banner** that must be acknowledged, linking to this tab. It is raised at most once an hour however many requests fail, and acknowledged by the first request EasyPost answers again. A parcel it cannot price, an address it does not know and being asked to slow down say nothing. Needs `kempo >= 4.15.0`.
+
 ## Verify against the real API first
 
 This was written from EasyPost's docs before a key was used here, so a few details are **assumptions to check with the first real call** (**Test EasyPost** does one and shows every service EasyPost returned, with the exact `Carrier:Service` name, so a name that differs from the list is easy to fix):

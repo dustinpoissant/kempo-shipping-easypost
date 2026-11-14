@@ -4,10 +4,16 @@ All notable changes to `kempo-shipping-easypost` are documented in this file.
 
 ## [Unreleased]
 
+Requires kempo 4.15.0 or later, for the notification types.
+
+### Added
+
+- **The people who hold `shipping:manage` are told when EasyPost stops giving prices** (the key was refused, the account is out of credit, the service is down): a banner that must be acknowledged, raised at most once an hour however many requests fail, and acknowledged by the first request EasyPost answers again. Checkout carries on with the store's own table or flat rate, which is why nothing else would say it. A parcel EasyPost cannot price, an address it does not know and being asked to slow down say nothing.
+
 ### Changed
 
 - The `kempo-ui` peer dependency is now `>=1.0.0`.
-- The `kempo` peer dependency is now `>=4.10.2`.
+- The `kempo` peer dependency is now `>=4.15.0`.
 
 - The EasyPost order tab is a plain `k-tab` and `k-tab-content` on the order page, and reloads when the order changes.
 

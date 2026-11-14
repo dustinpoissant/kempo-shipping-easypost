@@ -135,7 +135,7 @@ test('a parcel that cannot be measured is skipped and the others are still price
   const { parcels, result } = await run({ parcels: [parcel({ weight: null }), parcel({ id: 'parcel-2' })] });
   assert.equal(parcels[0].quotes.length, 0);
   assert.equal(parcels[1].quotes.length, 2);
-  assert.deepEqual(result, { quoted: 2, skipped: 1, pending: false });
+  assert.deepEqual(result, { quoted: 2, skipped: 1, pending: false, broken: null, answered: true });
 });
 
 test('the cache forgets entries after they expire', () => {

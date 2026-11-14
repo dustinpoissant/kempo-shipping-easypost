@@ -2,6 +2,10 @@ import { readSettings } from '../server/utils/config.js';
 import { isConfigured } from '../server/utils/settings.js';
 import { quoteParcels } from '../server/utils/quotes.js';
 import { cache, clientFor } from '../server/utils/shared.js';
+import { pricesFailed, pricesWorked } from '../server/utils/notifications/failures.js';
+import { createNotification, markAcknowledged } from 'kempo/server/sdk.js';
+
+const core = { createNotification, markAcknowledged };
 
 /*
   The `kempo-shipping:rates` hook: adds a quote for each parcel and each carrier service the seller offers (see
@@ -16,6 +20,8 @@ export default async ({ parcels, address, origin, units, currency, ready, charge
     if(!isConfigured(settings)) return;
     const result = await quoteParcels({ parcels, address, origin, units, currency, settings, client: clientFor(settings), cache, ready: ready !== false });
     if(result.pending && charge) charge.pending = true;
+    if(result.broken) await pricesFailed({ error: result.broken, core });
+    else if(result.answered) await pricesWorked({ core });
   } catch(error) {
     console.error('[kempo-shipping-easypost] Could not price the parcels:', error);
   }
